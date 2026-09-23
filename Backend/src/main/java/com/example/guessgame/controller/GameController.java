@@ -7,6 +7,7 @@ import com.example.guessgame.service.GameService;
 import com.example.guessgame.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.example.guessgame.model.User;
@@ -26,12 +27,19 @@ public class GameController {
     }
 
     @PostMapping("/start")
-    public Game startGame()
-    {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public CurrentGameResponse startGame() {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
         String username = authentication.getName();
-        User user = userRepository.findByUsername(username).orElseThrow();
-        return gameService.startGame(user.getId());
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow();
+
+        Game game = gameService.startGame(user.getId());
+
+        return gameService.getGameResponse(game);
     }
     
     @PostMapping("/guess")
@@ -42,5 +50,15 @@ public class GameController {
         User user = userRepository.findByUsername(username).orElseThrow();
         return gameService.makeGuessWord(user.getId(),request.guess());
         
+    }
+    @GetMapping("/current")
+    public CurrentGameResponse getCurrentGame(Authentication authentication) {
+
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow();
+
+        return gameService.getCurrentGame(user.getId());
     }
 }

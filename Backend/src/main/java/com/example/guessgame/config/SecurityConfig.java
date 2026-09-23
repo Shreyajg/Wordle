@@ -38,7 +38,7 @@ public class SecurityConfig {
 
         http
             .csrf(csrf -> csrf.disable())
-
+            .cors(cors -> {})
             .sessionManagement(session ->
                     session.sessionCreationPolicy(
                             SessionCreationPolicy.STATELESS
@@ -46,10 +46,12 @@ public class SecurityConfig {
             )
 
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/auth/**").permitAll()
-                    .requestMatchers("/admin/**").hasRole("ADMIN")
-                    .requestMatchers("/games/**").hasAnyRole("PLAYER", "ADMIN")
-                    .anyRequest().authenticated()
+                .requestMatchers("/auth/login", "/auth/register").permitAll()
+                .requestMatchers("/auth/me").authenticated()
+                .requestMatchers("/auth/logout").authenticated()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/games/**").hasAnyRole("PLAYER", "ADMIN")
+                .anyRequest().authenticated()
             )
 
             .addFilterBefore(

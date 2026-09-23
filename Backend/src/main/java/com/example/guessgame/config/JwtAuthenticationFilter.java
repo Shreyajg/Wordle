@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.example.guessgame.model.User;
 import com.example.guessgame.repository.UserRepository;
-
+import jakarta.servlet.http.Cookie;
 import java.util.Optional;
 import java.io.IOException;
 import java.util.List;
@@ -37,46 +37,52 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+        Cookie[] cookies = request.getCookies();
 
-        if (authHeader == null ||
-                !authHeader.startsWith("Bearer ")) {
+String token = null;
 
-            filterChain.doFilter(request, response);
-            return;
+if (cookies != null) {
+    for (Cookie cookie : cookies) {
+        if ("token".equals(cookie.getName())) {
+            token = cookie.getValue();
+            break;
         }
+    }
+}
 
-        String token = authHeader.substring(7);
-        String username = jwtService.extractUsername(token);
+if (token != null && !token.isBlank()) {
 
-        if (username != null &&
-                SecurityContextHolder.getContext().getAuthentication() == null &&
-                jwtService.validateToken(token, username)) {
+    String username = jwtService.extractUsername(token);
 
-            Optional<User> user =
-                    userRepository.findByUsername(username);
+    if (username != null &&
+            SecurityContextHolder.getContext().getAuthentication() == null &&
+            jwtService.validateToken(token, username)) {
 
-            if (user.isPresent()) {
+        Optional<User> user =
+                userRepository.findByUsername(username);
 
-                String role =
-                        "ROLE_" + user.get().getRole().name();
+        if (user.isPresent()) {
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                username,
-                                null,
-                                List.of(new SimpleGrantedAuthority(role))
-                        );
+            String role =
+                    "ROLE_" + user.get().getRole().name();
 
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource()
-                                .buildDetails(request)
-                );
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            username,
+                            null,
+                            List.of(new SimpleGrantedAuthority(role))
+                    );
 
-                SecurityContextHolder.getContext()
-                        .setAuthentication(authentication);
-            }
+            authentication.setDetails(
+                    new WebAuthenticationDetailsSource()
+                            .buildDetails(request)
+            );
+
+            SecurityContextHolder.getContext()
+                    .setAuthentication(authentication);
         }
+    }
+}
 
         filterChain.doFilter(request, response);
     }

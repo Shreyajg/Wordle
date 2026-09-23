@@ -1,5 +1,3 @@
-let token = "";
-
 async function login() {
 
     const username = document.getElementById("login-username").value;
@@ -7,6 +5,7 @@ async function login() {
 
     const response = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
+        credentials: "include",
         headers: {
             "Content-Type": "application/json"
         },
@@ -24,22 +23,20 @@ async function login() {
 
     const data = await response.json();
 
-    token = data.token;
-
     document.getElementById("login-section").classList.add("hidden");
     document.getElementById("game-section").classList.remove("hidden");
+    if (data.role === "ADMIN") {
+    document.getElementById("admin-section").classList.remove("hidden");
+    }
 
     startGame();
 }
 
 
 async function startGame() {
-
     const response = await fetch("http://localhost:8080/games/start", {
         method: "POST",
-        headers: {
-            "Authorization": "Bearer " + token
-        }
+        credentials: "include"
     });
 
     if (!response.ok) {
@@ -48,13 +45,23 @@ async function startGame() {
         return;
     }
 
-    const game = await response.json();
+    const data = await response.json();
 
-    document.getElementById("game-message").textContent =
-        "Game started! You have 5 guesses.";
+    console.log("Game started:", data);
+
+    const guessesContainer = document.getElementById("guesses");
+    guessesContainer.innerHTML = "";
+
+    // Restore previous guesses
+    for (let i = 0; i < data.guesses.length; i++) {
+        displayGuess(data.guesses[i], data.results[i]);
+    }
+
+    document.getElementById("game-message").textContent = "";
+    document.getElementById("guess").value = "";
+    document.getElementById("guess").disabled = false;
+    document.querySelector(".guess-button").disabled = false;
 }
-
-
 async function submitGuess() {
 
     const guessInput = document.getElementById("guess");
@@ -62,9 +69,9 @@ async function submitGuess() {
 
     const response = await fetch("http://localhost:8080/games/guess", {
         method: "POST",
+        credentials: "include",
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({
             guess: guess
@@ -137,6 +144,7 @@ async function register() {
 
     const response = await fetch("http://localhost:8080/auth/register", {
         method: "POST",
+        credentials: "include",
         headers: {
             "Content-Type": "application/json"
         },
@@ -166,3 +174,125 @@ function showRegister() {
     document.getElementById("login-section").classList.add("hidden");
     document.getElementById("register-section").classList.remove("hidden");
 }
+async function logout() {
+
+    await fetch("http://localhost:8080/auth/logout", {
+        method: "POST",
+        credentials: "include"
+    });
+
+    // Clear UI
+    document.getElementById("game-section").classList.add("hidden");
+    document.getElementById("login-section").classList.remove("hidden");
+
+    document.getElementById("guesses").innerHTML = "";
+    document.getElementById("game-message").textContent = "";
+    document.getElementById("guess").value = "";
+
+
+    document.getElementById("login-message").textContent = "";
+}
+async function checkLogin() {
+
+    const response = await fetch("http://localhost:8080/auth/me", {
+        method: "GET",
+        credentials: "include"
+    });
+
+    if (!response.ok) {
+        // No valid cookie → stay on login page
+        return;
+    }
+
+    const data = await response.json();
+
+    // User is already logged in
+    document.getElementById("login-section").classList.add("hidden");
+    document.getElementById("register-section").classList.add("hidden");
+    document.getElementById("game-section").classList.remove("hidden");
+    if (data.role === "ADMIN") {
+    document.getElementById("admin-section").classList.remove("hidden");
+    await loadCurrentGame();
+}
+}
+    // Now restore the current game
+async function loadCurrentGame() {
+
+    const response = await fetch(
+        "http://localhost:8080/games/current",
+        {
+            credentials: "include"
+        }
+    );
+
+    console.log("CURRENT GAME STATUS:", response.status);
+
+    if (!response.ok) {
+        console.log("CURRENT GAME ERROR:", await response.text());
+        return;
+    }
+
+    const data = await response.json();
+
+    console.log("CURRENT GAME DATA:", data);
+
+    const guessesContainer = document.getElementById("guesses");
+    guessesContainer.innerHTML = "";
+
+    for (let i = 0; i < data.guesses.length; i++) {
+
+        console.log(
+            "RENDERING:",
+            data.guesses[i],
+            data.results[i]
+        );
+
+        displayGuess(
+            data.guesses[i],
+            data.results[i]
+        );
+    }
+}
+async function showUserReport() {
+    const playerId = prompt("Enter player ID:");
+
+    if (!playerId) {
+        return;
+    }
+
+    const date = new Date().toISOString().split("T")[0];
+
+    const response = await fetch(
+        `http://localhost:8080/admin/user-report/${playerId}?date=${date}`,
+        {
+            credentials: "include"
+        }
+    );
+
+    const data = await response.json();
+
+    document.getElementById("admin-report").innerHTML = `
+        <p>Date: ${data.date}</p>
+        <p>Words tried: ${data.noOfWordsTried}</p>
+        <p>Correct guesses: ${data.noOfCorrectGuesses}</p>
+    `;
+}
+async function showDailyReport() {
+    const date = new Date().toISOString().split("T")[0];
+
+    const response = await fetch(
+        `http://localhost:8080/admin/daily-report?date=${date}`,
+        {
+            credentials: "include"
+        }
+    );
+
+    const data = await response.json();
+
+    document.getElementById("admin-report").innerHTML = `
+        <p>Users today: ${data.noOfUsers}</p>
+        <p>Correct guesses: ${data.noOfCorrectGuesses}</p>
+    `;
+}
+console.log("SCRIPT LOADED");
+checkLogin();

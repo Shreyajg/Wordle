@@ -20,7 +20,10 @@ public class UserService {
         this.userRepository=userRepository;
         this.passwordEncoder=passwordEncoder;
     }
-
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new GameException("User not found"));
+    }
     public User register(String username,String password,String confirmPassword)
     {
         if(username.length()<5) throw new GameException("username should have a minimum of 5 characters");

@@ -11,7 +11,7 @@ import com.example.guessgame.model.Game;
 import com.example.guessgame.model.Word;
 import java.util.List;
 import java.util.Random;
-
+import com.example.guessgame.controller.CurrentGameResponse;
 import org.springframework.stereotype.Service;
 import com.example.guessgame.controller.GameResponse;
 import java.util.ArrayList;
@@ -83,37 +83,7 @@ public class GameService {
         String targetWord=currGame.getTargetWord().trim().toUpperCase();
         LetterResult[] result=new LetterResult[5];
 
-        for (int i = 0; i < 5; i++) {
-            if (guess.charAt(i) == targetWord.charAt(i)) {
-                result[i]=LetterResult.GREEN;
-            } else {
-                result[i]=null; 
-            }
-        }
-        HashMap<Character,Integer> hm=new HashMap<>();
-        for(int i=0;i<5;i++)
-        {
-            if(result[i]==null)
-            {
-                char c=targetWord.charAt(i);
-                hm.put(c,hm.getOrDefault(c,0)+1);
-            }
-        }
-        for(int i=0;i<5;i++)
-        {
-            if(result[i] != null) {
-                continue;
-            }
-
-            if(hm.getOrDefault(guess.charAt(i), 0) > 0 && result[i]==null)
-            {
-                result[i]=LetterResult.ORANGE;
-                hm.put(guess.charAt(i),hm.get(guess.charAt(i))-1);
-            }
-            else{
-                result[i]=LetterResult.GREY;
-            }
-        }
+        result=calculateResult(targetWord, guess);
         currGuesses.add(guess);
         boolean won=true;
         for(int i=0;i<5;i++)
@@ -137,4 +107,88 @@ public class GameService {
         gameRepository.save(currGame);
         return new GameResponse(result,currGame.getStatus());
     }
+    private LetterResult[] calculateResult(String target, String guess) {
+
+        LetterResult[] result = new LetterResult[5];
+        boolean[] used = new boolean[5];
+
+        // First pass: GREEN
+        for (int i = 0; i < 5; i++) {
+            if (guess.charAt(i) == target.charAt(i)) {
+                result[i] = LetterResult.GREEN;
+                used[i] = true;
+            }
+        }
+
+        // Second pass: ORANGE / GREY
+        for (int i = 0; i < 5; i++) {
+
+            if (result[i] != null) {
+                continue;
+            }
+
+            for (int j = 0; j < 5; j++) {
+
+                if (!used[j] && guess.charAt(i) == target.charAt(j)) {
+                    result[i] = LetterResult.ORANGE;
+                    used[j] = true;
+                    break;
+                }
+            }
+
+            if (result[i] == null) {
+                result[i] = LetterResult.GREY;
+            }
+        }
+
+        return result;
+    }
+    public CurrentGameResponse getCurrentGame(String playerId) {
+
+        Optional<Game> activeGame =
+                gameRepository.findByPlayerIdAndStatus(
+                        playerId,
+                        Status.IN_PROGRESS
+                );
+
+        if (activeGame.isEmpty()) {
+            return new CurrentGameResponse(
+                    List.of(),
+                    List.of(),
+                    Status.IN_PROGRESS
+            );
+        }
+
+        Game game = activeGame.get();
+
+        List<String> guesses = game.getGuesses();
+
+        List<LetterResult[]> results = guesses.stream()
+                .map(guess ->
+                        calculateResult(game.getTargetWord(), guess)
+                )
+                .toList();
+
+        return new CurrentGameResponse(
+                guesses,
+                results,
+                game.getStatus()
+        );
+    }
+    public CurrentGameResponse getGameResponse(Game game) {
+
+    List<LetterResult[]> results = game.getGuesses()
+            .stream()
+            .map(guess -> calculateResult(
+                    game.getTargetWord(),
+                    guess
+            ))
+            .toList();
+
+    return new CurrentGameResponse(
+            game.getGuesses(),
+            results,
+            game.getStatus()
+    );
+}
 }

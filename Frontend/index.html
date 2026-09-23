@@ -37,13 +37,29 @@
     <!-- Game -->
     <div id="game-section" class="hidden">
 
-        <h2>Guess the 5-letter word</h2>
+        <div class="game-header">
+            <div>
+                <p>Guess the hidden 5-letter word</p>
+            </div>
+
+            <button class="logout-button" onclick="logout()">Logout</button>
+        </div>
+
+        <button class="new-game-button" onclick="startGame()">
+            + New Game
+        </button>
 
         <div id="guess-input">
-            <input id="guess" type="text"
-                   maxlength="5"
-                   placeholder="Enter word">
-            <button onclick="submitGuess()">Guess</button>
+            <input
+                id="guess"
+                type="text"
+                maxlength="5"
+                placeholder="Enter your guess"
+            >
+
+            <button class="guess-button" onclick="submitGuess()">
+                Guess
+            </button>
         </div>
 
         <div id="guesses"></div>
@@ -51,6 +67,14 @@
         <p id="game-message"></p>
 
     </div>
+    <div id="admin-section" class="hidden">
+    <h2>Admin Reports</h2>
+
+    <button onclick="showDailyReport()">Daily Report</button>
+    <button onclick="showUserReport()">User Report</button>
+
+    <div id="admin-report"></div>
+</div>
 
 </div>
 
