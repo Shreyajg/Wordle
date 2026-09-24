@@ -100,7 +100,7 @@ The application supports two roles — **Player** and **Admin** — with persist
 ```
 
 ## Project Structure:
-
+```text
 guess-game/
 │
 ├── Backend/
@@ -126,8 +126,9 @@ guess-game/
 │   └── script.js
 │
 └── README.md
-
+```
 ## Game Flow:
+```text
 Login / Register
        │
        ▼
@@ -150,8 +151,10 @@ Random 5-letter word
        │                    Continue
        │
        └────────────── 5th incorrect ─────────► LOST
+```
 
 ## Authentication
+```text
 Login
   │
   ▼
@@ -165,7 +168,7 @@ Store JWT in HttpOnly cookie
   │
   ▼
 Authenticated requests
-
+```
 ## Role based Authorization:
 
 The game supports :
