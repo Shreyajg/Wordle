@@ -184,7 +184,7 @@ async function logout() {
     // Clear UI
     document.getElementById("game-section").classList.add("hidden");
     document.getElementById("login-section").classList.remove("hidden");
-
+    document.getElementById("admin-section").classList.add("hidden");
     document.getElementById("guesses").innerHTML = "";
     document.getElementById("game-message").textContent = "";
     document.getElementById("guess").value = "";
