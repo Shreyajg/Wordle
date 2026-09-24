@@ -199,27 +199,34 @@ Admin:
 ## DATABASE:
 
 ### User:
+```text
 id
 username
 passwordHash
 role
-
+```
 ### Word:
+```text
 id
 word
+```
 
 ### Games:
+```text
 id
 playerId
 targetWord
 guesses
 status
 createdAt
+```
 
 where status can be:
+```text
 IN_PROGRESS
 WON
 LOST
+```
 
 ## Daily Game Limit
 
@@ -240,18 +247,22 @@ Number of games successfully won
 Unique users are determined from the distinct playerId values of games created during the selected date.
 
 Example:
+```text
 {
     "noOfUsers": 10,
     "noOfCorrectGuesses": 6
 }
+```
 ### User Report
 
 The user report provides statistics for an individual player on a selected date.
+```text
 {
     "date": "2026-09-23",
     "noOfWordsTried": 1,
     "noOfCorrectGuesses": 0
 }
+```
 
 ## Running Locally
 
@@ -273,19 +284,26 @@ JWT_SECRET
 #### 3. Start the backend
 
 From the Backend directory:
-- .\mvnw.cmd spring-boot:run
+```text
+.\mvnw.cmd spring-boot:run
+```
 
 The Backend runs on:
-- http://localhost:8080
+```text
+http://localhost:8080
+```
 
 #### 4.Start the frontend
 
 From the Frontend directory:
+```text
+python -m http.server 5500
+```
 
-- python -m http.server 5500
-
-then open :
-- http://localhost:5500
+then open 
+```text
+http://localhost:5500
+```
 
 ## Testing
 
@@ -349,7 +367,7 @@ The application uses:
 
 ## Author
 
-- Shreya Jaganatha Gowda
+Shreya Jaganatha Gowda
 
 
 
