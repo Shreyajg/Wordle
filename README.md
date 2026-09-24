@@ -343,15 +343,15 @@ The application uses:
 - Environment variables for secrets
 
 ## Screenshots:
--- Admin Login:
+- Admin Login:
 
 <img width="740" height="478" alt="image" src="https://github.com/user-attachments/assets/81a3c224-3ff4-43f9-a322-4227d24a6879" />
 
--- Admin Dashboard:
+- Admin Dashboard:
 
 <img width="693" height="701" alt="image" src="https://github.com/user-attachments/assets/a702e853-0415-42d6-8c0b-4be41e86fffd" />
 
--- Player Login:
+- Player Login:
 
 <img width="658" height="470" alt="image" src="https://github.com/user-attachments/assets/de2553d8-b5b9-4ed3-9541-d737750eb2bc" />
 
