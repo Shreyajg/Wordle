@@ -13,19 +13,19 @@ import com.example.guessgame.controller.AdminUserResponse;
 @Service 
 public class AdminService {
     private final GameRepository gameRepository;
-    private final UserRepository userRepository;
 
     public AdminService(GameRepository gameRepository,
                         UserRepository userRepository) {
         this.gameRepository = gameRepository;
-        this.userRepository = userRepository;
     }
 
     public AdminResponse getDailyReport(LocalDate date)
     {
         LocalDateTime startOfDay=date.atStartOfDay();
         LocalDateTime endOfDay=date.atTime(LocalTime.MAX);
-        long noOfUsers=userRepository.count();
+        long noOfUsers= gameRepository
+            .findUniquePlayerIdsByCreatedAtBetween(startOfDay, endOfDay)
+            .size();
         long noOfCorrectGuesses=gameRepository.findByStatusAndCreatedAtBetween(Status.WON,startOfDay,endOfDay).size();
 
         return new AdminResponse(noOfUsers,noOfCorrectGuesses);

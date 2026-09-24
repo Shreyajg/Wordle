@@ -15,7 +15,6 @@ import com.example.guessgame.controller.CurrentGameResponse;
 import org.springframework.stereotype.Service;
 import com.example.guessgame.controller.GameResponse;
 import java.util.ArrayList;
-import java.util.HashMap;
 import com.example.guessgame.model.LetterResult;
 import com.example.guessgame.exception.GameException;
 
@@ -72,6 +71,9 @@ public class GameService {
         //validate guess
         guess=guess.trim().toUpperCase();
         if(guess.length()!=5) throw new GameException("Word length should be equal to 5");
+        if (wordRepository.findByWord(guess).isEmpty()) {
+            throw new GameException("Word is not in the word list");
+        }
         for(int i=0;i<guess.length();i++)
         {
             if (guess.charAt(i) < 'A' || guess.charAt(i) > 'Z')

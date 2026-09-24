@@ -5,6 +5,8 @@ import com.example.guessgame.model.Status;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface GameRepository extends MongoRepository<Game,String>{
@@ -13,4 +15,13 @@ public interface GameRepository extends MongoRepository<Game,String>{
     Optional<Game> findByPlayerIdAndStatus(String playerId,Status status);
     List<Game> findByStatusAndCreatedAtBetween(Status status,LocalDateTime start,LocalDateTime end);
     List<Game> findByPlayerIdAndStatusAndCreatedAtBetween(String playerId,Status status,LocalDateTime start,LocalDateTime end);
+    @Aggregation(pipeline = {
+        "{ '$match': { 'createdAt': { '$gte': ?0, '$lt': ?1 } } }",
+        "{ '$group': { '_id': '$playerId' } }",
+        "{ '$project': { '_id': 0, 'playerId': '$_id' } }"
+    })
+    List<String> findUniquePlayerIdsByCreatedAtBetween(
+            LocalDateTime start,
+            LocalDateTime end
+    );
 }

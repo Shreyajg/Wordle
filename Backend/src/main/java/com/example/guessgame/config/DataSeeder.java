@@ -6,8 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import com.example.guessgame.repository.WordRepository;
 import com.example.guessgame.model.Word;
-import com.example.guessgame.repository.UserRepository;
-import com.example.guessgame.model.User;
+
 @Component
 public class DataSeeder implements CommandLineRunner {
 
@@ -48,14 +47,5 @@ public class DataSeeder implements CommandLineRunner {
             wordRepository.save(new Word(word));
         }
     }
-    if (userRepository.findByUsername("AdminUser").isEmpty()) {
-            User admin = new User(
-                "AdminUser",
-                passwordEncoder.encode("Admin1$"),
-                Role.ADMIN
-            );
-
-            userRepository.save(admin);
-        }
     }
 }

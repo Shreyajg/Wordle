@@ -290,7 +290,8 @@ async function showDailyReport() {
     const data = await response.json();
 
     document.getElementById("admin-report").innerHTML = `
-        <p>Users today: ${data.noOfUsers}</p>
+        <p>Total Users: ${data.noOfUsers}</p>
+        <p>Users Today: ${data.noOfUsersToday}
         <p>Correct guesses: ${data.noOfCorrectGuesses}</p>
     `;
 }
