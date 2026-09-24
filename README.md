@@ -272,15 +272,17 @@ The user report provides statistics for an individual player on a selected date.
 - Git
 -The project includes the Maven Wrapper, so Maven does not need to be installed separately.
 #### 1. Clone the repository
-
+```text
 git clone <YOUR_GITHUB_REPOSITORY_URL>
 cd guess-game
+```
 
 #### 2. Configure environment variables
 The backend requires:
+```text
 MONGODB_URI
 JWT_SECRET
-
+```
 #### 3. Start the backend
 
 From the Backend directory:
