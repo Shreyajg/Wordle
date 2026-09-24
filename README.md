@@ -97,8 +97,10 @@ The application supports two roles — **Player** and **Admin** — with persist
 │ Words                    │
 │ Games                    │
 └──────────────────────────┘
+```
 
 ## Project Structure:
+
 guess-game/
 │
 ├── Backend/
