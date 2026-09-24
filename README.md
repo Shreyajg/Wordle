@@ -352,6 +352,7 @@ The application uses:
 <img width="693" height="701" alt="image" src="https://github.com/user-attachments/assets/a702e853-0415-42d6-8c0b-4be41e86fffd" />
 
 -- Player Login:
+
 <img width="658" height="470" alt="image" src="https://github.com/user-attachments/assets/de2553d8-b5b9-4ed3-9541-d737750eb2bc" />
 
 ### Game:
@@ -361,6 +362,7 @@ The application uses:
 <img width="702" height="763" alt="image" src="https://github.com/user-attachments/assets/8ead572f-0be0-458c-ba39-1a05b9df2362" />
 
 - Game Lost:
+  
 <img width="807" height="825" alt="image" src="https://github.com/user-attachments/assets/e53a3845-b1e6-41dd-be0a-470bd5d13024" />
 
 - 3 games / day limit reached:
