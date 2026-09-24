@@ -24,6 +24,8 @@ The application supports two roles — **Player** and **Admin** — with persist
 - Guesses and game state persisted in MongoDB
 - Previous guesses restored after page reload
 - Validation of guesses against the stored word list
+- Displays a congratulatory message with an OK confirmation when the player wins
+- Displays a "Better luck next time" message with an OK confirmation after five unsuccessful guesses
 
 ### Admin
 
@@ -129,6 +131,9 @@ guess-game/
 ```
 ## Game Flow:
 ```text
+## Game Flow
+
+```text
 Login / Register
        │
        ▼
@@ -141,6 +146,15 @@ Random 5-letter word
    Submit Guess
        │
        ├─────────────── Correct ──────────────► WON
+       │                                           │
+       │                                           ▼
+       │                                  Congratulations
+       │                                           │
+       │                                           ▼
+       │                                      [ OK ]
+       │                                           │
+       │                                           ▼
+       │                                      Game stops
        │
        ├─────────────── Incorrect
        │                       │
@@ -151,6 +165,15 @@ Random 5-letter word
        │                    Continue
        │
        └────────────── 5th incorrect ─────────► LOST
+                                                   │
+                                                   ▼
+                                          Better luck next time
+                                                   │
+                                                   ▼
+                                               [ OK ]
+                                                   │
+                                                   ▼
+                                             Game stops
 ```
 
 ## Authentication
@@ -320,7 +343,9 @@ The application was tested for:
 - Word validation
 - GREEN / ORANGE / GREY feedback
 - Correct guesses
+- Congratulatory message and OK confirmation
 - Failed games
+- Better luck next time message and OK confirmation
 - Five-guess limit
 - Three-games-per-day limit
 - Persistence of guesses
