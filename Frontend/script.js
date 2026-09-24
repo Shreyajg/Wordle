@@ -111,6 +111,18 @@ async function submitGuess() {
         document.getElementById("game-message").textContent =
             "Keep going!";
     }
+
+    if (data.status === "WON") {
+        alert("🎉 Congratulations! You guessed the word!");
+        guessInput.disabled = true;
+        document.querySelector("#guess-input button").disabled = true;
+
+    } else if (data.status === "LOST") {
+        alert("Better luck next time!");
+        guessInput.disabled = true;
+        document.querySelector("#guess-input button").disabled = true;
+
+    }
 }
 
 
