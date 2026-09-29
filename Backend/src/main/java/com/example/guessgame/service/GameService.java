@@ -107,9 +107,17 @@ public class GameService {
             currGame.setStatus(Status.LOST);
         }
         gameRepository.save(currGame);
-        return new GameResponse(result,currGame.getStatus());
+        String answer = currGame.getStatus() == Status.LOST
+                ? currGame.getTargetWord()
+                : null;
+
+        return new GameResponse(
+                result,
+                currGame.getStatus(),
+                answer
+        );
     }
-    private LetterResult[] calculateResult(String target, String guess) {
+    static LetterResult[] calculateResult(String target, String guess) {
 
         LetterResult[] result = new LetterResult[5];
         boolean[] used = new boolean[5];

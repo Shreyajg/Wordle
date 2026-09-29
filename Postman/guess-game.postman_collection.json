@@ -1,0 +1,130 @@
+{
+  "info": {
+    "name": "Guess the Word API",
+    "description": "Log in first via /auth/login. The JWT is stored in an HttpOnly cookie, which Postman's cookie jar sends automatically on later requests. Adjust request bodies / query params if your DTOs differ.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST /auth/register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"player1\",\n  \"password\": \"ChangeMe123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /auth/login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"player1\",\n  \"password\": \"ChangeMe123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /auth/me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /auth/logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/auth/logout", "host": ["{{baseUrl}}"], "path": ["auth", "logout"] }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Game",
+      "item": [
+        {
+          "name": "POST /games/start",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/games/start", "host": ["{{baseUrl}}"], "path": ["games", "start"] }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /games/guess",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guess\": \"apple\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/games/guess", "host": ["{{baseUrl}}"], "path": ["games", "guess"] }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /games/current",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/games/current", "host": ["{{baseUrl}}"], "path": ["games", "current"] }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin (log in as admin first)",
+      "item": [
+        {
+          "name": "GET /admin/daily-report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/daily-report?date=2026-09-29",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "daily-report"],
+              "query": [{ "key": "date", "value": "2026-09-29" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /admin/user-report/{playerId}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/user-report/PLAYER_ID_HERE?date=2026-09-29",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "user-report", "PLAYER_ID_HERE"],
+              "query": [{ "key": "date", "value": "2026-09-29" }]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
