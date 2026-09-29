@@ -18,7 +18,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"player1\",\n  \"password\": \"ChangeMe123\"\n}"
+              "raw": "{\n  \"username\": \"player1\",\n  \"password\": \"ChangeMe123\"\n ,\n \"confirmPassword\": \"ChangeMe123\"}"
             },
             "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
           },
