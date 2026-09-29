@@ -101,7 +101,7 @@ async function submitGuess() {
     } else if (data.status === "LOST") {
 
         document.getElementById("game-message").textContent =
-            "Better luck next time!";
+            "Better luck next time! The word was: "+data.targetWord;
 
         guessInput.disabled = true;
         document.querySelector("#guess-input button").disabled = true;
@@ -118,7 +118,7 @@ async function submitGuess() {
         document.querySelector("#guess-input button").disabled = true;
 
     } else if (data.status === "LOST") {
-        alert("Better luck next time!");
+        alert("Better luck next time! The word was " + data.targetWord);
         guessInput.disabled = true;
         document.querySelector("#guess-input button").disabled = true;
 
@@ -224,8 +224,9 @@ async function checkLogin() {
     document.getElementById("game-section").classList.remove("hidden");
     if (data.role === "ADMIN") {
     document.getElementById("admin-section").classList.remove("hidden");
+    }
     await loadCurrentGame();
-}
+
 }
     // Now restore the current game
 async function loadCurrentGame() {
@@ -302,8 +303,7 @@ async function showDailyReport() {
     const data = await response.json();
 
     document.getElementById("admin-report").innerHTML = `
-        <p>Total Users: ${data.noOfUsers}</p>
-        <p>Users Today: ${data.noOfUsersToday}
+        <p>Users Today: ${data.noOfUsers}</p>
         <p>Correct guesses: ${data.noOfCorrectGuesses}</p>
     `;
 }
