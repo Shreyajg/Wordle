@@ -394,6 +394,9 @@ The application uses:
 
 <img width="705" height="562" alt="image" src="https://github.com/user-attachments/assets/b978e1b8-84bc-40ab-8a15-995e500ffe43" />
 
+
+The python version can be found here : https://github.com/Shreyajg/Wordle_PY
+
 ## Author
 
 Shreya Jaganatha Gowda
